@@ -2,6 +2,7 @@
 package handlers
 
 import (
+	"errors"
 	"github.com/gofiber/fiber/v2"
 	"github.com/richard-on/auth-service/pkg/authService"
 	"github.com/richard-on/mail-service/config"
@@ -9,7 +10,9 @@ import (
 	"github.com/richard-on/mail-service/pkg/logger"
 	"github.com/richard-on/mail-service/pkg/server/request"
 	"github.com/richard-on/mail-service/pkg/server/response"
-	"net/smtp"
+	"github.com/sendgrid/sendgrid-go"
+	"github.com/sendgrid/sendgrid-go/helpers/mail"
+	"os"
 )
 
 type MailHandler struct {
@@ -64,32 +67,28 @@ func (h *MailHandler) Send(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusForbidden).JSON(response.Error{Error: ErrNoSenderMatch.Error()})
 	}
 
-	//from := "From: " + sendRequest.From + ";\n"
-	to := "To: " + sendRequest.To[0] + "\n"
-	subject := "Subject: " + sendRequest.Subject + "\n"
-	mime := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
-	body, err := templates.SelectTemplate(sendRequest)
-	if err != nil {
+	html, plain, err := templates.GetTemplate(sendRequest)
+	if err == templates.ErrNoSuchTemplate {
+		return ctx.Status(fiber.StatusBadRequest).JSON(response.Error{Error: templates.ErrNoSuchTemplate.Error()})
+	} else if err == templates.ErrBadFormat || errors.Unwrap(err) == templates.ErrBadFormat {
+		h.log.Debug(err)
+		return ctx.Status(fiber.StatusBadRequest).JSON(response.Error{Error: templates.ErrBadFormat.Error()})
+	} else if err != nil {
 		h.log.Debugf("template error", err)
 		return ctx.Status(fiber.StatusNotImplemented).JSON(response.Error{Error: err.Error()})
 	}
 
-	msg := []byte(to + subject + mime + body)
-
-	auth := smtp.PlainAuth("", config.Mailgun.Host, config.Mailgun.Pass, config.SMTP.Host)
-
-	// Sending email
-	err = smtp.SendMail(
-		config.SMTP.Host+":"+config.SMTP.Port,
-		auth,
-		validateResponse.Email,
-		sendRequest.To,
-		msg,
-	)
-	if err != nil {
+	from := mail.NewEmail(sendRequest.From, "no-reply@richardhere.dev")
+	subject := sendRequest.Subject
+	to := mail.NewEmail(sendRequest.To, sendRequest.To)
+	message := mail.NewSingleEmail(from, subject, to, plain, html)
+	client := sendgrid.NewSendClient(os.Getenv("MAILGUN_PASS"))
+	sendResponse, err := client.Send(message)
+	if err != nil || sendResponse.StatusCode != 202 {
 		h.log.Error(err, "send error")
 		return ctx.SendStatus(fiber.StatusInternalServerError)
 	}
+	h.log.Debug(sendResponse)
 
 	return ctx.SendStatus(fiber.StatusOK)
 }

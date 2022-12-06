@@ -12,6 +12,7 @@ require (
 	github.com/matcornic/hermes/v2 v2.1.0
 	github.com/richard-on/auth-service v0.1.0
 	github.com/rs/zerolog v1.28.0
+	github.com/sendgrid/sendgrid-go v3.12.0+incompatible
 	google.golang.org/grpc v1.51.0
 )
 
@@ -51,6 +52,7 @@ require (
 	github.com/prometheus/procfs v0.7.3 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
+	github.com/sendgrid/rest v2.6.9+incompatible // indirect
 	github.com/ssor/bom v0.0.0-20170718123548-6386211fdfcf // indirect
 	github.com/swaggo/files v0.0.0-20220728132757-551d4a08d97a // indirect
 	github.com/swaggo/swag v1.8.8 // indirect
