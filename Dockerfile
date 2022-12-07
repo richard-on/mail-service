@@ -15,7 +15,7 @@ FROM alpine:latest
 WORKDIR /mail
 
 COPY --from=builder /mail/run /mail/run
-COPY --from=builder /mail/.env /auth/.env
+COPY --from=builder /mail/.env /mail/.env
 
 EXPOSE 80
 

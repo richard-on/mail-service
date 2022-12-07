@@ -36,7 +36,6 @@ var GoDotEnv bool
 var FiberPrefork bool
 var MaxCPU int
 var Host string
-var SecureCookie bool
 
 func Init(log logger.Logger) {
 	var err error
@@ -50,11 +49,6 @@ func Init(log logger.Logger) {
 
 	SMTP.Host = os.Getenv("SMTP_HOST")
 	SMTP.Port = os.Getenv("SMTP_PORT")
-
-	SecureCookie, err = strconv.ParseBool(os.Getenv("SECURE_COOKIE"))
-	if err != nil {
-		log.Infof("SECURE_COOKIE init: %v", err)
-	}
 
 	GoDotEnv, err = strconv.ParseBool(os.Getenv("GODOTENV"))
 	if err != nil {

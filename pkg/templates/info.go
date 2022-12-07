@@ -3,7 +3,6 @@ package templates
 import (
 	"github.com/matcornic/hermes/v2"
 	"github.com/richard-on/mail-service/pkg/server/request"
-	"os"
 )
 
 // Info is the template for info emails
@@ -33,9 +32,6 @@ func (i *Info) setTemplate(req *request.SendMail) (string, string, error) {
 	}
 
 	emailPlain, err := h.GeneratePlainText(email)
-
-	// Optionally, preview the generated HTML e-mail by writing it to a local file
-	err = os.WriteFile("request.html", []byte(emailHTML), 0644)
 	if err != nil {
 		return "", "", err
 	}

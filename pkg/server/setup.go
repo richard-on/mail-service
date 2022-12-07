@@ -22,7 +22,7 @@ type Server struct {
 func NewApp() Server {
 	log := logger.NewLogger(config.DefaultWriter,
 		config.LogInfo.Level,
-		"auth-server")
+		"mail-server")
 
 	app := fiber.New(fiber.Config{
 		Prefork:       config.FiberPrefork,

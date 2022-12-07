@@ -6,10 +6,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/richard-on/auth-service/pkg/authService"
 	"github.com/richard-on/mail-service/config"
-	"github.com/richard-on/mail-service/internal/templates"
 	"github.com/richard-on/mail-service/pkg/logger"
 	"github.com/richard-on/mail-service/pkg/server/request"
 	"github.com/richard-on/mail-service/pkg/server/response"
+	templates2 "github.com/richard-on/mail-service/pkg/templates"
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"os"
@@ -67,12 +67,12 @@ func (h *MailHandler) Send(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusForbidden).JSON(response.Error{Error: ErrNoSenderMatch.Error()})
 	}
 
-	html, plain, err := templates.GetTemplate(sendRequest)
-	if err == templates.ErrNoSuchTemplate {
-		return ctx.Status(fiber.StatusBadRequest).JSON(response.Error{Error: templates.ErrNoSuchTemplate.Error()})
-	} else if err == templates.ErrBadFormat || errors.Unwrap(err) == templates.ErrBadFormat {
+	html, plain, err := templates2.GetTemplate(sendRequest)
+	if err == templates2.ErrNoSuchTemplate {
+		return ctx.Status(fiber.StatusBadRequest).JSON(response.Error{Error: templates2.ErrNoSuchTemplate.Error()})
+	} else if err == templates2.ErrBadFormat || errors.Unwrap(err) == templates2.ErrBadFormat {
 		h.log.Debug(err)
-		return ctx.Status(fiber.StatusBadRequest).JSON(response.Error{Error: templates.ErrBadFormat.Error()})
+		return ctx.Status(fiber.StatusBadRequest).JSON(response.Error{Error: templates2.ErrBadFormat.Error()})
 	} else if err != nil {
 		h.log.Debugf("template error", err)
 		return ctx.Status(fiber.StatusNotImplemented).JSON(response.Error{Error: err.Error()})

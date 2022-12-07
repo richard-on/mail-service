@@ -34,7 +34,7 @@ func main() {
 
 	log := logger.NewLogger(config.DefaultWriter,
 		zerolog.TraceLevel,
-		"auth-setup")
+		"mail-setup")
 
 	config.GoDotEnv, err = strconv.ParseBool(os.Getenv("GODOTENV"))
 	if err != nil {

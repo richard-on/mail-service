@@ -3,19 +3,17 @@ package templates
 import (
 	"github.com/matcornic/hermes/v2"
 	"github.com/richard-on/mail-service/pkg/server/request"
-	"os"
 )
 
-// Coordination is the template for coordination emails
-type Coordination struct {
-	acceptLink  string `json:"acceptLink"`
-	declineLink string `json:"declineLink"`
+// Verification is the template for verification emails
+type Verification struct {
+	verifyLink string `json:"verifyLink"`
 }
 
-func (c *Coordination) setTemplate(req *request.SendMail) (string, string, error) {
+func (v *Verification) setTemplate(req *request.SendMail) (string, string, error) {
 	h := hermes.Hermes{
 		Product: hermes.Product{
-			Name: "Coordination Service",
+			Name: "Info",
 			Link: "https://richardhere.dev/",
 			Logo: "https://www.duchess-france.org/wp-content/uploads/2016/01/gopher.png",
 		},
@@ -24,22 +22,14 @@ func (c *Coordination) setTemplate(req *request.SendMail) (string, string, error
 	email := hermes.Email{
 		Body: hermes.Body{
 			Name:   req.From,
-			Intros: []string{"This is coordination service"},
+			Intros: []string{"Verification"},
 			Actions: []hermes.Action{
 				{
 					Instructions: "To approve this task:",
 					Button: hermes.Button{
 						Color: "#22BC66", // Optional action button color
 						Text:  "Approve",
-						Link:  c.acceptLink,
-					},
-				},
-				{
-					Instructions: "To decline this task:",
-					Button: hermes.Button{
-						Color: "#BC3922", // Optional action button color
-						Text:  "Decline",
-						Link:  c.declineLink,
+						Link:  v.verifyLink,
 					},
 				},
 			},
@@ -52,9 +42,6 @@ func (c *Coordination) setTemplate(req *request.SendMail) (string, string, error
 	}
 
 	emailPlain, err := h.GeneratePlainText(email)
-
-	// Optionally, preview the generated HTML e-mail by writing it to a local file
-	err = os.WriteFile("request.html", []byte(emailHTML), 0644)
 	if err != nil {
 		return "", "", err
 	}
