@@ -7,7 +7,7 @@ import (
 
 // Verification is the template for verification emails
 type Verification struct {
-	verifyLink string `json:"verifyLink"`
+	VerifyLink string `json:"verifyLink"`
 }
 
 func (v *Verification) setTemplate(req *request.SendMail) (string, string, error) {
@@ -29,7 +29,7 @@ func (v *Verification) setTemplate(req *request.SendMail) (string, string, error
 					Button: hermes.Button{
 						Color: "#22BC66", // Optional action button color
 						Text:  "Approve",
-						Link:  v.verifyLink,
+						Link:  v.VerifyLink,
 					},
 				},
 			},

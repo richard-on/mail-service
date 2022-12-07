@@ -36,12 +36,12 @@ func GetTemplate(req *request.SendMail) (plain string, html string, err error) {
 
 	case "verification":
 		var v Verification
-		v.verifyLink = req.Template.(map[string]interface{})["verifyLink"].(string)
+		v.VerifyLink = req.Template.(map[string]interface{})["verifyLink"].(string)
 		return v.setTemplate(req)
 
 	case "info":
 		var i Info
-		i.body = req.Template.(map[string]interface{})["body"].(string)
+		i.Body = req.Template.(map[string]interface{})["body"].(string)
 		return i.setTemplate(req)
 
 	default:

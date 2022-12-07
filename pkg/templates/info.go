@@ -7,7 +7,7 @@ import (
 
 // Info is the template for info emails
 type Info struct {
-	body string `json:"body,omitempty"`
+	Body string `json:"body,omitempty"`
 }
 
 func (i *Info) setTemplate(req *request.SendMail) (string, string, error) {
@@ -22,7 +22,7 @@ func (i *Info) setTemplate(req *request.SendMail) (string, string, error) {
 	email := hermes.Email{
 		Body: hermes.Body{
 			Name:   req.From,
-			Intros: []string{i.body},
+			Intros: []string{i.Body},
 		},
 	}
 

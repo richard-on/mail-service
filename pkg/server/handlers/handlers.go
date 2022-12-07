@@ -62,7 +62,7 @@ func (h *MailHandler) Send(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusBadRequest).JSON(response.Error{Error: err.Error()})
 	}
 
-	if sendRequest.From != validateResponse.Username {
+	if sendRequest.From != validateResponse.Email {
 		h.log.Debug(ErrNoSenderMatch)
 		return ctx.Status(fiber.StatusForbidden).JSON(response.Error{Error: ErrNoSenderMatch.Error()})
 	}
