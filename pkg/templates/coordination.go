@@ -5,10 +5,10 @@ import (
 	"github.com/richard-on/mail-service/pkg/server/request"
 )
 
-// Coordination is the template for coordination emails
+// Coordination is the template for coordination
 type Coordination struct {
-	acceptLink  string `json:"acceptLink"`
-	declineLink string `json:"declineLink"`
+	AcceptLink  string `json:"acceptLink"`
+	DeclineLink string `json:"declineLink"`
 }
 
 func (c *Coordination) setTemplate(req *request.SendMail) (string, string, error) {
@@ -30,7 +30,7 @@ func (c *Coordination) setTemplate(req *request.SendMail) (string, string, error
 					Button: hermes.Button{
 						Color: "#22BC66", // Optional action button color
 						Text:  "Approve",
-						Link:  c.acceptLink,
+						Link:  c.AcceptLink,
 					},
 				},
 				{
@@ -38,7 +38,7 @@ func (c *Coordination) setTemplate(req *request.SendMail) (string, string, error
 					Button: hermes.Button{
 						Color: "#BC3922", // Optional action button color
 						Text:  "Decline",
-						Link:  c.declineLink,
+						Link:  c.DeclineLink,
 					},
 				},
 			},

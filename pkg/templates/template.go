@@ -30,8 +30,8 @@ func GetTemplate(req *request.SendMail) (plain string, html string, err error) {
 	switch req.Type {
 	case "coordination":
 		var c Coordination
-		c.acceptLink = req.Template.(map[string]interface{})["acceptLink"].(string)
-		c.declineLink = req.Template.(map[string]interface{})["declineLink"].(string)
+		c.AcceptLink = req.Template.(map[string]interface{})["acceptLink"].(string)
+		c.DeclineLink = req.Template.(map[string]interface{})["declineLink"].(string)
 		return c.setTemplate(req)
 
 	case "verification":
